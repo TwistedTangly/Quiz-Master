@@ -11,6 +11,7 @@ public class Quiz : MonoBehaviour
     [SerializeField] TextMeshProUGUI questionText;
     [SerializeField] List<QuestionSO> questions = new List<QuestionSO>();
     QuestionSO currentQuestion;
+    int NumOfQuestions;
 
     [Header("Answers")]
     [SerializeField] GameObject[] answerButton;
@@ -40,6 +41,12 @@ public class Quiz : MonoBehaviour
         scoreKeeper = FindObjectOfType<ScoreKeeper>();
         progressbar.maxValue = questions.Count;
         progressbar.value = 0;
+        NumOfQuestions = questions.Count;
+    }
+    private void Start() 
+    {
+        NumOfQuestions = questions.Count;
+        scoreText.text = "Score: " + scoreKeeper.GetCorrectAnswers() + "/" + NumOfQuestions;
     }
     void Update() 
     {
@@ -69,7 +76,7 @@ public class Quiz : MonoBehaviour
         DisplayAnswer(index);
         SetButtonState(false);
         timer.CancelTimer();
-        scoreText.text = "Score: " + scoreKeeper.CaluculateScore() + "%";
+        scoreText.text = "Score: " + scoreKeeper.GetCorrectAnswers() + "/" + NumOfQuestions;
     }
 
     void DisplayAnswer(int index) 
@@ -141,6 +148,11 @@ public class Quiz : MonoBehaviour
             Image buttonImage = answerButton[i].GetComponent<Image>();
             buttonImage.sprite = defaultAnswerSprite;
         }
+    }
+
+    public int NumberOfQuestions()
+    {
+        return NumOfQuestions;
     }
 
 
